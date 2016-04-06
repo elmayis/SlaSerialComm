@@ -30,8 +30,8 @@
         {
          this.btnSerialPorts = new System.Windows.Forms.Button();
          this.button2 = new System.Windows.Forms.Button();
-         this.listBox1 = new System.Windows.Forms.ListBox();
          this.rtbIncomingData = new System.Windows.Forms.TextBox();
+         this.cboSerialPorts = new System.Windows.Forms.ComboBox();
          this.SuspendLayout();
          // 
          // btnSerialPorts
@@ -53,14 +53,6 @@
          this.button2.Text = "button2";
          this.button2.UseVisualStyleBackColor = true;
          // 
-         // listBox1
-         // 
-         this.listBox1.FormattingEnabled = true;
-         this.listBox1.Location = new System.Drawing.Point(117, 18);
-         this.listBox1.Name = "listBox1";
-         this.listBox1.Size = new System.Drawing.Size(141, 17);
-         this.listBox1.TabIndex = 2;
-         // 
          // rtbIncomingData
          // 
          this.rtbIncomingData.Location = new System.Drawing.Point(12, 127);
@@ -69,13 +61,21 @@
          this.rtbIncomingData.Size = new System.Drawing.Size(513, 323);
          this.rtbIncomingData.TabIndex = 3;
          // 
+         // cboSerialPorts
+         // 
+         this.cboSerialPorts.FormattingEnabled = true;
+         this.cboSerialPorts.Location = new System.Drawing.Point(108, 13);
+         this.cboSerialPorts.Name = "cboSerialPorts";
+         this.cboSerialPorts.Size = new System.Drawing.Size(179, 21);
+         this.cboSerialPorts.TabIndex = 4;
+         // 
          // SlaSerialCommMainForm
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
          this.ClientSize = new System.Drawing.Size(537, 462);
+         this.Controls.Add(this.cboSerialPorts);
          this.Controls.Add(this.rtbIncomingData);
-         this.Controls.Add(this.listBox1);
          this.Controls.Add(this.button2);
          this.Controls.Add(this.btnSerialPorts);
          this.Name = "SlaSerialCommMainForm";
@@ -89,8 +89,8 @@
 
         private System.Windows.Forms.Button btnSerialPorts;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.TextBox rtbIncomingData;
-    }
+      private System.Windows.Forms.ComboBox cboSerialPorts;
+   }
 }
 

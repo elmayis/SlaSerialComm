@@ -30,10 +30,15 @@ namespace SlaSerialComm
          do
          {
             index += 1;
-            rtbIncomingData.Text += ArrayComPortsNames[index] + "\r\n";
+            cboSerialPorts.Items.Add(ArrayComPortsNames[index]);
+            // Select the first entry added to the combo box
+            //
+            if(0 == index)
+            {
+               cboPorts.Text = ArrayComPortsNames[index];
+            }
          }
-         while (!((ArrayComPortsNames[index] == ComPortName) ||
-                             (index == ArrayComPortsNames.GetUpperBound(0))));
+         while (!((ArrayComPortsNames[index] == ComPortName) || (index == ArrayComPortsNames.GetUpperBound(0))));
       }
    }
 }
