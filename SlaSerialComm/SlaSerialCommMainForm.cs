@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace SlaSerialComm
 {
    public partial class SlaSerialCommMainForm : Form
    {
-      SerialPort ComPort = new SerialPort();
+      SerialPort _serialPort = new SerialPort();
 
       public SlaSerialCommMainForm()
       {
@@ -68,29 +62,33 @@ namespace SlaSerialComm
          btnConnect.Enabled = false;
          btnDisconnect.Enabled = false;
          btnDownload.Enabled = false;
+         btnSend.Enabled = false;
+
+
+         Thread readThread = new Thread(Read);
       }
 
       private void btnSerialPorts_Click(object sender, EventArgs e)
       {
-         string[] ArrayComPortsNames = null;
+         string[] Array_serialPortsNames = null;
 
-         ArrayComPortsNames = SerialPort.GetPortNames();
-         if (0 != ArrayComPortsNames.GetLength(0))
+         Array_serialPortsNames = SerialPort.GetPortNames();
+         if (0 != Array_serialPortsNames.GetLength(0))
          {
-            string ComPortName = null;
+            string _serialPortName = null;
             int index = -1;
             do
             {
                index += 1;
-               cboSerialPorts.Items.Add(ArrayComPortsNames[index]);
+               cboSerialPorts.Items.Add(Array_serialPortsNames[index]);
                // Select the first entry added to the combo box
                //
                if (0 == index)
                {
-                  cboSerialPorts.Text = ArrayComPortsNames[index];
+                  cboSerialPorts.Text = Array_serialPortsNames[index];
                }
             }
-            while (!((ArrayComPortsNames[index] == ComPortName) || (index == ArrayComPortsNames.GetUpperBound(0))));
+            while (!((Array_serialPortsNames[index] == _serialPortName) || (index == Array_serialPortsNames.GetUpperBound(0))));
             btnConnect.Enabled = true;
          }
          else
@@ -101,24 +99,57 @@ namespace SlaSerialComm
 
       private void btnConnect_Click(object sender, EventArgs e)
       {
-         ComPort.PortName = Convert.ToString(cboSerialPorts.Text);
-         ComPort.BaudRate = Convert.ToInt32(cboBaudRate.Text);
-         ComPort.DataBits = Convert.ToInt16(cboDataBits.Text);
-         ComPort.StopBits = (StopBits)Enum.Parse(typeof(StopBits), cboStopBits.Text);
-         ComPort.Handshake = (Handshake)Enum.Parse(typeof(Handshake), cboHandshaking.Text);
-         ComPort.Parity = (Parity)Enum.Parse(typeof(Parity), cboParity.Text);
-         ComPort.Open();
-         btnConnect.Enabled = false;
-         btnDisconnect.Enabled = true;
-         btnDownload.Enabled = true;
+         _serialPort.PortName = Convert.ToString(cboSerialPorts.Text);
+         _serialPort.BaudRate = Convert.ToInt32(cboBaudRate.Text);
+         _serialPort.DataBits = Convert.ToInt16(cboDataBits.Text);
+         _serialPort.StopBits = (StopBits)Enum.Parse(typeof(StopBits), cboStopBits.Text);
+         _serialPort.Handshake = (Handshake)Enum.Parse(typeof(Handshake), cboHandshaking.Text);
+         _serialPort.Parity = (Parity)Enum.Parse(typeof(Parity), cboParity.Text);
+         try
+         {
+            _serialPort.Open();
+            btnConnect.Enabled = false;
+            btnDisconnect.Enabled = true;
+            btnDownload.Enabled = true;
+            btnSend.Enabled = true;
+         }
+         catch
+         {
+            btnConnect.Enabled = true;
+            btnDisconnect.Enabled = false;
+            btnDownload.Enabled = false;
+            btnSend.Enabled = false;
+         }
       }
 
       private void btnDisconnect_Click(object sender, EventArgs e)
       {
-         ComPort.Close();
+         _serialPort.Close();
          btnConnect.Enabled = false;
          btnDisconnect.Enabled = false;
          btnDownload.Enabled = false;
+         btnSend.Enabled = false;
+      }
+
+      public void Read()
+      {
+         //while (_continue)
+         //{
+            try
+            {
+               string message = _serialPort.ReadLine();
+               rtbIncomingData.Text = message + "\r\n";
+            }
+            catch (TimeoutException) { }
+         //}
+      }
+
+      private void btnSend_Click(object sender, EventArgs e)
+      {
+         if(0 != tboCommands.Text.Length)
+         {
+            _serialPort.WriteLine(tboCommands.Text);
+         }
       }
    }
 }

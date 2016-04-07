@@ -46,11 +46,13 @@
          this.btnLoadFile = new System.Windows.Forms.Button();
          this.btnDownload = new System.Windows.Forms.Button();
          this.btnDisconnect = new System.Windows.Forms.Button();
+         this.tboCommands = new System.Windows.Forms.TextBox();
+         this.btnSend = new System.Windows.Forms.Button();
          this.SuspendLayout();
          // 
          // btnSerialPorts
          // 
-         this.btnSerialPorts.Location = new System.Drawing.Point(296, 12);
+         this.btnSerialPorts.Location = new System.Drawing.Point(284, 11);
          this.btnSerialPorts.Name = "btnSerialPorts";
          this.btnSerialPorts.Size = new System.Drawing.Size(75, 23);
          this.btnSerialPorts.TabIndex = 0;
@@ -60,7 +62,7 @@
          // 
          // btnConnect
          // 
-         this.btnConnect.Location = new System.Drawing.Point(296, 41);
+         this.btnConnect.Location = new System.Drawing.Point(284, 38);
          this.btnConnect.Name = "btnConnect";
          this.btnConnect.Size = new System.Drawing.Size(75, 23);
          this.btnConnect.TabIndex = 1;
@@ -180,7 +182,7 @@
          // 
          // btnLoadFile
          // 
-         this.btnLoadFile.Location = new System.Drawing.Point(420, 13);
+         this.btnLoadFile.Location = new System.Drawing.Point(450, 11);
          this.btnLoadFile.Name = "btnLoadFile";
          this.btnLoadFile.Size = new System.Drawing.Size(75, 23);
          this.btnLoadFile.TabIndex = 16;
@@ -189,7 +191,7 @@
          // 
          // btnDownload
          // 
-         this.btnDownload.Location = new System.Drawing.Point(420, 44);
+         this.btnDownload.Location = new System.Drawing.Point(450, 38);
          this.btnDownload.Name = "btnDownload";
          this.btnDownload.Size = new System.Drawing.Size(75, 23);
          this.btnDownload.TabIndex = 17;
@@ -198,7 +200,7 @@
          // 
          // btnDisconnect
          // 
-         this.btnDisconnect.Location = new System.Drawing.Point(296, 70);
+         this.btnDisconnect.Location = new System.Drawing.Point(284, 66);
          this.btnDisconnect.Name = "btnDisconnect";
          this.btnDisconnect.Size = new System.Drawing.Size(75, 23);
          this.btnDisconnect.TabIndex = 18;
@@ -206,11 +208,30 @@
          this.btnDisconnect.UseVisualStyleBackColor = true;
          this.btnDisconnect.Click += new System.EventHandler(this.btnDisconnect_Click);
          // 
+         // tboCommands
+         // 
+         this.tboCommands.Location = new System.Drawing.Point(284, 121);
+         this.tboCommands.Name = "tboCommands";
+         this.tboCommands.Size = new System.Drawing.Size(241, 20);
+         this.tboCommands.TabIndex = 19;
+         // 
+         // btnSend
+         // 
+         this.btnSend.Location = new System.Drawing.Point(284, 146);
+         this.btnSend.Name = "btnSend";
+         this.btnSend.Size = new System.Drawing.Size(75, 23);
+         this.btnSend.TabIndex = 20;
+         this.btnSend.Text = "Send";
+         this.btnSend.UseVisualStyleBackColor = true;
+         this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
+         // 
          // SlaSerialCommMainForm
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
          this.ClientSize = new System.Drawing.Size(537, 462);
+         this.Controls.Add(this.btnSend);
+         this.Controls.Add(this.tboCommands);
          this.Controls.Add(this.btnDisconnect);
          this.Controls.Add(this.btnDownload);
          this.Controls.Add(this.btnLoadFile);
@@ -256,6 +277,8 @@
       private System.Windows.Forms.Button btnLoadFile;
       private System.Windows.Forms.Button btnDownload;
       private System.Windows.Forms.Button btnDisconnect;
+      private System.Windows.Forms.TextBox tboCommands;
+      private System.Windows.Forms.Button btnSend;
    }
 }
 
