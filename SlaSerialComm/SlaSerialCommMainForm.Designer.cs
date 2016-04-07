@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
          this.btnSerialPorts = new System.Windows.Forms.Button();
-         this.button2 = new System.Windows.Forms.Button();
+         this.btnConnect = new System.Windows.Forms.Button();
          this.rtbIncomingData = new System.Windows.Forms.TextBox();
          this.cboSerialPorts = new System.Windows.Forms.ComboBox();
          this.cboBaudRate = new System.Windows.Forms.ComboBox();
@@ -43,6 +43,9 @@
          this.lblStopBits = new System.Windows.Forms.Label();
          this.lblParity = new System.Windows.Forms.Label();
          this.lblHandshaking = new System.Windows.Forms.Label();
+         this.btnLoadFile = new System.Windows.Forms.Button();
+         this.btnDownload = new System.Windows.Forms.Button();
+         this.btnDisconnect = new System.Windows.Forms.Button();
          this.SuspendLayout();
          // 
          // btnSerialPorts
@@ -55,14 +58,15 @@
          this.btnSerialPorts.UseVisualStyleBackColor = true;
          this.btnSerialPorts.Click += new System.EventHandler(this.btnSerialPorts_Click);
          // 
-         // button2
+         // btnConnect
          // 
-         this.button2.Location = new System.Drawing.Point(296, 44);
-         this.button2.Name = "button2";
-         this.button2.Size = new System.Drawing.Size(75, 23);
-         this.button2.TabIndex = 1;
-         this.button2.Text = "button2";
-         this.button2.UseVisualStyleBackColor = true;
+         this.btnConnect.Location = new System.Drawing.Point(296, 41);
+         this.btnConnect.Name = "btnConnect";
+         this.btnConnect.Size = new System.Drawing.Size(75, 23);
+         this.btnConnect.TabIndex = 1;
+         this.btnConnect.Text = "Connect";
+         this.btnConnect.UseVisualStyleBackColor = true;
+         this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
          // 
          // rtbIncomingData
          // 
@@ -174,11 +178,42 @@
          this.lblHandshaking.TabIndex = 15;
          this.lblHandshaking.Text = "Handshaking:";
          // 
+         // btnLoadFile
+         // 
+         this.btnLoadFile.Location = new System.Drawing.Point(420, 13);
+         this.btnLoadFile.Name = "btnLoadFile";
+         this.btnLoadFile.Size = new System.Drawing.Size(75, 23);
+         this.btnLoadFile.TabIndex = 16;
+         this.btnLoadFile.Text = "Load File";
+         this.btnLoadFile.UseVisualStyleBackColor = true;
+         // 
+         // btnDownload
+         // 
+         this.btnDownload.Location = new System.Drawing.Point(420, 44);
+         this.btnDownload.Name = "btnDownload";
+         this.btnDownload.Size = new System.Drawing.Size(75, 23);
+         this.btnDownload.TabIndex = 17;
+         this.btnDownload.Text = "Download";
+         this.btnDownload.UseVisualStyleBackColor = true;
+         // 
+         // btnDisconnect
+         // 
+         this.btnDisconnect.Location = new System.Drawing.Point(296, 70);
+         this.btnDisconnect.Name = "btnDisconnect";
+         this.btnDisconnect.Size = new System.Drawing.Size(75, 23);
+         this.btnDisconnect.TabIndex = 18;
+         this.btnDisconnect.Text = "Disconnect";
+         this.btnDisconnect.UseVisualStyleBackColor = true;
+         this.btnDisconnect.Click += new System.EventHandler(this.btnDisconnect_Click);
+         // 
          // SlaSerialCommMainForm
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
          this.ClientSize = new System.Drawing.Size(537, 462);
+         this.Controls.Add(this.btnDisconnect);
+         this.Controls.Add(this.btnDownload);
+         this.Controls.Add(this.btnLoadFile);
          this.Controls.Add(this.lblHandshaking);
          this.Controls.Add(this.lblParity);
          this.Controls.Add(this.lblStopBits);
@@ -192,7 +227,7 @@
          this.Controls.Add(this.cboBaudRate);
          this.Controls.Add(this.cboSerialPorts);
          this.Controls.Add(this.rtbIncomingData);
-         this.Controls.Add(this.button2);
+         this.Controls.Add(this.btnConnect);
          this.Controls.Add(this.btnSerialPorts);
          this.Name = "SlaSerialCommMainForm";
          this.Text = "Form1";
@@ -204,7 +239,7 @@
         #endregion
 
         private System.Windows.Forms.Button btnSerialPorts;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnConnect;
         private System.Windows.Forms.TextBox rtbIncomingData;
       private System.Windows.Forms.ComboBox cboSerialPorts;
       private System.Windows.Forms.ComboBox cboBaudRate;
@@ -218,6 +253,9 @@
       private System.Windows.Forms.Label lblStopBits;
       private System.Windows.Forms.Label lblParity;
       private System.Windows.Forms.Label lblHandshaking;
+      private System.Windows.Forms.Button btnLoadFile;
+      private System.Windows.Forms.Button btnDownload;
+      private System.Windows.Forms.Button btnDisconnect;
    }
 }
 

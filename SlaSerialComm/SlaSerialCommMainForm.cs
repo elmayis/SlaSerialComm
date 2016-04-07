@@ -19,6 +19,8 @@ namespace SlaSerialComm
       {
          InitializeComponent();
 
+         // Baud rate control
+         //
          cboBaudRate.Items.Add(300);
          cboBaudRate.Items.Add(600);
          cboBaudRate.Items.Add(1200);
@@ -31,62 +33,92 @@ namespace SlaSerialComm
          cboBaudRate.Items.Add(115200);
          cboBaudRate.Items.Add(250000);
          cboBaudRate.Items.ToString();
-         //get first item print in text
          cboBaudRate.Text = cboBaudRate.Items[0].ToString();
 
-         //Data Bits
+         // Data bits control
+         //
          cboDataBits.Items.Add(7);
          cboDataBits.Items.Add(8);
-         //get the first item print it in the text 
          cboDataBits.Text = cboDataBits.Items[0].ToString();
 
-         //Stop Bits
+         // Stop bits control
+         //
          cboStopBits.Items.Add("One");
          cboStopBits.Items.Add("OnePointFive");
          cboStopBits.Items.Add("Two");
-         //get the first item print in the text
          cboStopBits.Text = cboStopBits.Items[0].ToString();
 
-         //Parity 
+         // Parity control
+         //
          cboParity.Items.Add("None");
          cboParity.Items.Add("Even");
          cboParity.Items.Add("Mark");
          cboParity.Items.Add("Odd");
          cboParity.Items.Add("Space");
-
-         //get the first item print in the text
-
          cboParity.Text = cboParity.Items[0].ToString();
 
-         //Handshake
+         //Handshake control
+         //
          cboHandshaking.Items.Add("None");
          cboHandshaking.Items.Add("XOnXOff");
          cboHandshaking.Items.Add("RequestToSend");
          cboHandshaking.Items.Add("RequestToSendXOnXOff");
-
-         //get the first item print it in the text 
          cboHandshaking.Text = cboHandshaking.Items[0].ToString();
+
+         btnConnect.Enabled = false;
+         btnDisconnect.Enabled = false;
+         btnDownload.Enabled = false;
       }
 
       private void btnSerialPorts_Click(object sender, EventArgs e)
       {
          string[] ArrayComPortsNames = null;
-         int index = -1;
-         string ComPortName = null;
 
          ArrayComPortsNames = SerialPort.GetPortNames();
-         do
+         if (0 != ArrayComPortsNames.GetLength(0))
          {
-            index += 1;
-            cboSerialPorts.Items.Add(ArrayComPortsNames[index]);
-            // Select the first entry added to the combo box
-            //
-            if(0 == index)
+            string ComPortName = null;
+            int index = -1;
+            do
             {
-               cboSerialPorts.Text = ArrayComPortsNames[index];
+               index += 1;
+               cboSerialPorts.Items.Add(ArrayComPortsNames[index]);
+               // Select the first entry added to the combo box
+               //
+               if (0 == index)
+               {
+                  cboSerialPorts.Text = ArrayComPortsNames[index];
+               }
             }
+            while (!((ArrayComPortsNames[index] == ComPortName) || (index == ArrayComPortsNames.GetUpperBound(0))));
+            btnConnect.Enabled = true;
          }
-         while (!((ArrayComPortsNames[index] == ComPortName) || (index == ArrayComPortsNames.GetUpperBound(0))));
+         else
+         {
+            btnConnect.Enabled = false;
+         }
+      }
+
+      private void btnConnect_Click(object sender, EventArgs e)
+      {
+         ComPort.PortName = Convert.ToString(cboSerialPorts.Text);
+         ComPort.BaudRate = Convert.ToInt32(cboBaudRate.Text);
+         ComPort.DataBits = Convert.ToInt16(cboDataBits.Text);
+         ComPort.StopBits = (StopBits)Enum.Parse(typeof(StopBits), cboStopBits.Text);
+         ComPort.Handshake = (Handshake)Enum.Parse(typeof(Handshake), cboHandshaking.Text);
+         ComPort.Parity = (Parity)Enum.Parse(typeof(Parity), cboParity.Text);
+         ComPort.Open();
+         btnConnect.Enabled = false;
+         btnDisconnect.Enabled = true;
+         btnDownload.Enabled = true;
+      }
+
+      private void btnDisconnect_Click(object sender, EventArgs e)
+      {
+         ComPort.Close();
+         btnConnect.Enabled = false;
+         btnDisconnect.Enabled = false;
+         btnDownload.Enabled = false;
       }
    }
 }
