@@ -66,6 +66,7 @@ namespace SlaSerialComm
 
 
          Thread readThread = new Thread(Read);
+         readThread.Start();
       }
 
       private void btnSerialPorts_Click(object sender, EventArgs e)
@@ -99,6 +100,8 @@ namespace SlaSerialComm
 
       private void btnConnect_Click(object sender, EventArgs e)
       {
+         // Arduino default is 8 bits, no parity, 1 stop bit
+         //
          _serialPort.PortName = Convert.ToString(cboSerialPorts.Text);
          _serialPort.BaudRate = Convert.ToInt32(cboBaudRate.Text);
          _serialPort.DataBits = Convert.ToInt16(cboDataBits.Text);
@@ -125,7 +128,7 @@ namespace SlaSerialComm
       private void btnDisconnect_Click(object sender, EventArgs e)
       {
          _serialPort.Close();
-         btnConnect.Enabled = false;
+         btnConnect.Enabled = true;
          btnDisconnect.Enabled = false;
          btnDownload.Enabled = false;
          btnSend.Enabled = false;
@@ -133,22 +136,24 @@ namespace SlaSerialComm
 
       public void Read()
       {
-         //while (_continue)
-         //{
+         if(_serialPort.IsOpen)
+         {
             try
             {
                string message = _serialPort.ReadLine();
                rtbIncomingData.Text = message + "\r\n";
             }
             catch (TimeoutException) { }
-         //}
+         }
       }
 
       private void btnSend_Click(object sender, EventArgs e)
       {
          if(0 != tboCommands.Text.Length)
          {
-            _serialPort.WriteLine(tboCommands.Text);
+            _serialPort.WriteLine(tboCommands.Text + "\r\n");
+            string message = _serialPort.ReadLine();
+            rtbIncomingData.Text = message + "\r\n";
          }
       }
    }
