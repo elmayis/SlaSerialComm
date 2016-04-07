@@ -8,6 +8,7 @@ namespace SlaSerialComm
    public partial class SlaSerialCommMainForm : Form
    {
       SerialPort _serialPort = new SerialPort();
+      bool _bContinue = true;
 
       public SlaSerialCommMainForm()
       {
@@ -136,14 +137,17 @@ namespace SlaSerialComm
 
       public void Read()
       {
-         if(_serialPort.IsOpen)
+         while(_bContinue)
          {
-            try
+            if (_serialPort.IsOpen)
             {
-               string message = _serialPort.ReadLine();
-               rtbIncomingData.Text = message + "\r\n";
+               try
+               {
+                  string message = _serialPort.ReadLine();
+                  rtbIncomingData.Text = message + "\r\n";
+               }
+               catch (TimeoutException) { }
             }
-            catch (TimeoutException) { }
          }
       }
 
