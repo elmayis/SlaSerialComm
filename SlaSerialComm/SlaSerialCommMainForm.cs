@@ -7,6 +7,8 @@ namespace SlaSerialComm
 {
    public partial class SlaSerialCommMainForm : Form
    {
+      public delegate void UpdateTextCallback(string text);
+
       SerialPort _serialPort = new SerialPort();
       bool _bContinue = true;
 
@@ -144,7 +146,8 @@ namespace SlaSerialComm
                try
                {
                   string message = _serialPort.ReadLine();
-                  rtbIncomingData.Text = message + "\r\n";
+                  rtbIncomingData.BeginInvoke(new UpdateTextCallback(UpdateText),
+                              new object[] { message });
                }
                catch (TimeoutException) { }
             }
@@ -155,10 +158,16 @@ namespace SlaSerialComm
       {
          if(0 != tboCommands.Text.Length)
          {
-            _serialPort.WriteLine(tboCommands.Text + "\r\n");
-            string message = _serialPort.ReadLine();
-            rtbIncomingData.Text = message + "\r\n";
+            _serialPort.WriteLine(tboCommands.Text/* + "\r\n"*/);
+            //string message = _serialPort.ReadLine();
+            //rtbIncomingData.Text = message + "\r\n";
          }
+      }
+
+      private void UpdateText(string text)
+      {
+         //rtbIncomingData.Text = text/* + "\r\n"*/;
+         rtbIncomingData.AppendText(text + "\r\n");
       }
    }
 }

@@ -72,9 +72,13 @@
          // 
          // rtbIncomingData
          // 
+         this.rtbIncomingData.AcceptsReturn = true;
+         this.rtbIncomingData.AcceptsTab = true;
+         this.rtbIncomingData.HideSelection = false;
          this.rtbIncomingData.Location = new System.Drawing.Point(12, 175);
          this.rtbIncomingData.Multiline = true;
          this.rtbIncomingData.Name = "rtbIncomingData";
+         this.rtbIncomingData.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
          this.rtbIncomingData.Size = new System.Drawing.Size(513, 275);
          this.rtbIncomingData.TabIndex = 3;
          // 
