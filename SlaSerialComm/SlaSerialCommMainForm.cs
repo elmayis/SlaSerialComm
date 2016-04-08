@@ -158,15 +158,12 @@ namespace SlaSerialComm
       {
          if(0 != tboCommands.Text.Length)
          {
-            _serialPort.WriteLine(tboCommands.Text/* + "\r\n"*/);
-            //string message = _serialPort.ReadLine();
-            //rtbIncomingData.Text = message + "\r\n";
+            _serialPort.WriteLine(tboCommands.Text);
          }
       }
 
       private void UpdateText(string text)
       {
-         //rtbIncomingData.Text = text/* + "\r\n"*/;
          rtbIncomingData.AppendText(text + "\r\n");
       }
    }
