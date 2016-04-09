@@ -9,6 +9,7 @@ namespace SlaSerialComm
    {
       public delegate void UpdateTextCallback(string text);
 
+      Thread readThread;
       SerialPort _serialPort = new SerialPort();
       bool _bContinue = true;
 
@@ -68,7 +69,7 @@ namespace SlaSerialComm
          btnSend.Enabled = false;
 
 
-         Thread readThread = new Thread(Read);
+         readThread = new Thread(Read);
          readThread.Start();
       }
 
@@ -176,6 +177,12 @@ namespace SlaSerialComm
       private void btnLoadFile_Click(object sender, EventArgs e)
       {
          openFileDialog.ShowDialog();
+      }
+
+      private void SlaSerialCommMainForm_FormClosed(object sender, FormClosedEventArgs e)
+      {
+         _bContinue = false;
+         readThread.Join();
       }
    }
 }

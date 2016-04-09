@@ -262,6 +262,7 @@
          this.Controls.Add(this.btnSerialPorts);
          this.Name = "SlaSerialCommMainForm";
          this.Text = "Form1";
+         this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SlaSerialCommMainForm_FormClosed);
          this.ResumeLayout(false);
          this.PerformLayout();
 
