@@ -9,9 +9,10 @@ namespace SlaSerialComm
    {
       public delegate void UpdateTextCallback(string text);
 
-      Thread readThread;
+      Thread _readThread;
       SerialPort _serialPort = new SerialPort();
       bool _bContinue = true;
+      string _SelectedFileName;
 
       public SlaSerialCommMainForm()
       {
@@ -69,8 +70,8 @@ namespace SlaSerialComm
          btnSend.Enabled = false;
 
 
-         readThread = new Thread(Read);
-         readThread.Start();
+         _readThread = new Thread(Read);
+         _readThread.Start();
       }
 
       private void btnSerialPorts_Click(object sender, EventArgs e)
@@ -170,8 +171,8 @@ namespace SlaSerialComm
 
       private void openFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
       {
-         string sFileName = openFileDialog.FileName;
-         UpdateText("File name selected is " + sFileName);
+         _SelectedFileName = openFileDialog.FileName;
+         UpdateText("File name selected is " + _SelectedFileName);
       }
 
       private void btnLoadFile_Click(object sender, EventArgs e)
@@ -182,7 +183,7 @@ namespace SlaSerialComm
       private void SlaSerialCommMainForm_FormClosed(object sender, FormClosedEventArgs e)
       {
          _bContinue = false;
-         readThread.Join();
+         _readThread.Join();
       }
    }
 }
