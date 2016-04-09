@@ -166,5 +166,16 @@ namespace SlaSerialComm
       {
          rtbIncomingData.AppendText(text + "\r\n");
       }
+
+      private void openFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+      {
+         string sFileName = openFileDialog.FileName;
+         UpdateText("File name selected is " + sFileName);
+      }
+
+      private void btnLoadFile_Click(object sender, EventArgs e)
+      {
+         openFileDialog.ShowDialog();
+      }
    }
 }

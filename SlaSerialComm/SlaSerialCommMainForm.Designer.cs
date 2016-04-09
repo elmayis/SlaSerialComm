@@ -48,6 +48,7 @@
          this.btnDisconnect = new System.Windows.Forms.Button();
          this.tboCommands = new System.Windows.Forms.TextBox();
          this.btnSend = new System.Windows.Forms.Button();
+         this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
          this.SuspendLayout();
          // 
          // btnSerialPorts
@@ -192,6 +193,7 @@
          this.btnLoadFile.TabIndex = 16;
          this.btnLoadFile.Text = "Load File";
          this.btnLoadFile.UseVisualStyleBackColor = true;
+         this.btnLoadFile.Click += new System.EventHandler(this.btnLoadFile_Click);
          // 
          // btnDownload
          // 
@@ -228,6 +230,10 @@
          this.btnSend.Text = "Send";
          this.btnSend.UseVisualStyleBackColor = true;
          this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
+         // 
+         // openFileDialog
+         // 
+         this.openFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog_FileOk);
          // 
          // SlaSerialCommMainForm
          // 
@@ -283,6 +289,7 @@
       private System.Windows.Forms.Button btnDisconnect;
       private System.Windows.Forms.TextBox tboCommands;
       private System.Windows.Forms.Button btnSend;
+      private System.Windows.Forms.OpenFileDialog openFileDialog;
    }
 }
 
