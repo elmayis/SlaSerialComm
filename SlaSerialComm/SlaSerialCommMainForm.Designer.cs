@@ -98,6 +98,7 @@
          this.cboBaudRate.Name = "cboBaudRate";
          this.cboBaudRate.Size = new System.Drawing.Size(179, 21);
          this.cboBaudRate.TabIndex = 5;
+         this.cboBaudRate.SelectionChangeCommitted += new System.EventHandler(this.cboBaudRate_SelectionChangeCommitted);
          // 
          // cboDataBits
          // 

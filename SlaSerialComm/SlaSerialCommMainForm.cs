@@ -2,12 +2,18 @@
 using System.IO.Ports;
 using System.Threading;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace SlaSerialComm
 {
    public partial class SlaSerialCommMainForm : Form
    {
       public delegate void UpdateTextCallback(string text);
+      //private uint m_uBaudRate = 0;
+      //private uint m_uDataBits = 0;
+      //private string m_sStopBits;
+
+
 
       Thread _readThread;
       SerialPort _serialPort = new SerialPort();
@@ -17,6 +23,7 @@ namespace SlaSerialComm
       public SlaSerialCommMainForm()
       {
          InitializeComponent();
+         ReadFromRegistry();
 
          // Baud rate control
          //
@@ -184,6 +191,44 @@ namespace SlaSerialComm
       {
          _bContinue = false;
          _readThread.Join();
+      }
+
+      private void ReadFromRegistry()
+      {
+         //string sSubkey = "SOFTWARE\\" + Application.ProductName;
+         //RegistryKey oCurrentUserRk = Registry.CurrentUser;
+         //RegistryKey oAppKey = oCurrentUserRk.OpenSubKey(sSubkey, true);
+         //if (null == oAppKey)
+         //{
+         //   oAppKey = oCurrentUserRk.CreateSubKey(sSubkey);
+         //}
+         //object oValue = oAppKey.GetValue("BaudRate");
+         //if(null == oValue)
+         //{
+         //   oAppKey.SetValue("BaudRate", 250000);
+         //}
+      }
+
+      private void cboBaudRate_SelectionChangeCommitted(object sender, EventArgs e)
+      {
+         RegistryKey oAppKey = GetAppSubKey();
+         int iValue = Convert.ToInt32(cboBaudRate.SelectedItem.ToString());
+         oAppKey.SetValue("BaudRate", iValue);
+      }
+
+      /**
+         @return the registry sub key for the application
+      */
+      private RegistryKey GetAppSubKey()
+      {
+         string sSubkey = "SOFTWARE\\" + Application.ProductName;
+         RegistryKey oCurrentUserRk = Registry.CurrentUser;
+         RegistryKey oAppKey = oCurrentUserRk.OpenSubKey(sSubkey, true);
+         if (null == oAppKey)
+         {
+            oAppKey = oCurrentUserRk.CreateSubKey(sSubkey);
+         }
+         return oAppKey;
       }
    }
 }
