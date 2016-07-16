@@ -195,18 +195,16 @@ namespace SlaSerialComm
 
       private void ReadFromRegistry()
       {
-         //string sSubkey = "SOFTWARE\\" + Application.ProductName;
-         //RegistryKey oCurrentUserRk = Registry.CurrentUser;
-         //RegistryKey oAppKey = oCurrentUserRk.OpenSubKey(sSubkey, true);
-         //if (null == oAppKey)
-         //{
-         //   oAppKey = oCurrentUserRk.CreateSubKey(sSubkey);
-         //}
-         //object oValue = oAppKey.GetValue("BaudRate");
-         //if(null == oValue)
-         //{
-         //   oAppKey.SetValue("BaudRate", 250000);
-         //}
+         RegistryKey oAppKey = GetAppSubKey();
+         object oValue = oAppKey.GetValue("BaudRate", 250000);
+         if(null == oValue)
+         {
+            int iIndex = cboBaudRate.FindString(oValue.ToString());
+            if(-1 != iIndex)
+            {
+               cboBaudRate.SelectedIndex = iIndex;
+            }
+         }
       }
 
       private void cboBaudRate_SelectionChangeCommitted(object sender, EventArgs e)
