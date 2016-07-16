@@ -23,7 +23,6 @@ namespace SlaSerialComm
       public SlaSerialCommMainForm()
       {
          InitializeComponent();
-         ReadFromRegistry();
 
          // Baud rate control
          //
@@ -76,6 +75,7 @@ namespace SlaSerialComm
          btnDownload.Enabled = false;
          btnSend.Enabled = false;
 
+         ReadFromRegistry();
 
          _readThread = new Thread(Read);
          _readThread.Start();
@@ -197,7 +197,7 @@ namespace SlaSerialComm
       {
          RegistryKey oAppKey = GetAppSubKey();
          object oValue = oAppKey.GetValue("BaudRate", 250000);
-         if(null == oValue)
+         if(null != oValue)
          {
             int iIndex = cboBaudRate.FindString(oValue.ToString());
             if(-1 != iIndex)
