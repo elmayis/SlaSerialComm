@@ -196,6 +196,8 @@ namespace SlaSerialComm
       private void ReadFromRegistry()
       {
          RegistryKey oAppKey = GetAppSubKey();
+         // Retrieve the baud rate from the registry
+         //
          object oValue = oAppKey.GetValue("BaudRate", 250000);
          if(null != oValue)
          {
@@ -205,13 +207,100 @@ namespace SlaSerialComm
                cboBaudRate.SelectedIndex = iIndex;
             }
          }
+         // Retrieve the data bits from the registy
+         //
+         oValue = oAppKey.GetValue("DataBits", 8);
+         if (null != oValue)
+         {
+            int iIndex = cboDataBits.FindString(oValue.ToString());
+            if (-1 != iIndex)
+            {
+               cboDataBits.SelectedIndex = iIndex;
+            }
+         }
+         // Retrieve the stop bits from the registy
+         //
+         oValue = oAppKey.GetValue("StopBits", "One");
+         if (null != oValue)
+         {
+            int iIndex = cboStopBits.FindString(oValue.ToString());
+            if (-1 != iIndex)
+            {
+               cboStopBits.SelectedIndex = iIndex;
+            }
+         }
+         // Retrieve the parity from the registy
+         //
+         oValue = oAppKey.GetValue("Parity", "None");
+         if (null != oValue)
+         {
+            int iIndex = cboParity.FindString(oValue.ToString());
+            if (-1 != iIndex)
+            {
+               cboParity.SelectedIndex = iIndex;
+            }
+         }
+         // Retrieve the handshaking from the registy
+         //
+         oValue = oAppKey.GetValue("Handshaking", "None");
+         if (null != oValue)
+         {
+            int iIndex = cboHandshaking.FindString(oValue.ToString());
+            if (-1 != iIndex)
+            {
+               cboParity.SelectedIndex = iIndex;
+            }
+         }
       }
 
+      /**
+         Update the registry when the baud rate selection changes
+      */
       private void cboBaudRate_SelectionChangeCommitted(object sender, EventArgs e)
       {
          RegistryKey oAppKey = GetAppSubKey();
          int iValue = Convert.ToInt32(cboBaudRate.SelectedItem.ToString());
          oAppKey.SetValue("BaudRate", iValue);
+      }
+
+      /**
+         Update the registry when the data bits selection changes
+      */
+      private void cboDataBits_SelectionChangeCommitted(object sender, EventArgs e)
+      {
+         RegistryKey oAppKey = GetAppSubKey();
+         int iValue = Convert.ToInt32(cboDataBits.SelectedItem.ToString());
+         oAppKey.SetValue("DataBits", iValue);
+      }
+
+      /**
+         Update the registry when the stop bits selection changes
+      */
+      private void cboStopBits_SelectionChangeCommitted(object sender, EventArgs e)
+      {
+         RegistryKey oAppKey = GetAppSubKey();
+         int iValue = Convert.ToInt32(cboStopBits.SelectedItem.ToString());
+         oAppKey.SetValue("StopBits", iValue);
+      }
+
+      /**
+         Update the registry when the parity selection changes
+      */
+      private void cboParity_SelectionChangeCommitted(object sender, EventArgs e)
+      {
+         RegistryKey oAppKey = GetAppSubKey();
+         int iValue = Convert.ToInt32(cboParity.SelectedItem.ToString());
+         oAppKey.SetValue("Parity", iValue);
+      }
+
+      /**
+         Update the registry when the handshaking selection changes
+      */
+      private void cboHandshaking_SelectionChangeCommitted(object sender, EventArgs e)
+      {
+         RegistryKey oAppKey = GetAppSubKey();
+         int iValue = Convert.ToInt32(cboHandshaking.SelectedItem.ToString());
+         oAppKey.SetValue("Parity", iValue);
       }
 
       /**
