@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.IO.Ports;
 using System.Threading;
 using System.Windows.Forms;
@@ -19,6 +20,7 @@ namespace SlaSerialComm
       SerialPort _serialPort = new SerialPort();
       bool _bContinue = true;
       string _SelectedFileName;
+      private FileStream m_oFileStream;
 
       public SlaSerialCommMainForm()
       {
@@ -180,10 +182,19 @@ namespace SlaSerialComm
       {
          _SelectedFileName = openFileDialog.FileName;
          UpdateText("File name selected is " + _SelectedFileName);
+         m_oFileStream = File.OpenRead(_SelectedFileName);
+         UpdateText("File size in bytes is " + m_oFileStream.Length);
+         while (m_oFileStream.Position < m_oFileStream.Length)
+         {
+            UpdateText(m_oFileStream.ReadByte().ToString());
+         }
+         m_oFileStream.Close();
       }
 
       private void btnLoadFile_Click(object sender, EventArgs e)
       {
+         openFileDialog.DefaultExt = ".ild";
+         openFileDialog.Filter = "ILDA documents (.ild)|*.ild";
          openFileDialog.ShowDialog();
       }
 
