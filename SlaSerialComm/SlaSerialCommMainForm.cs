@@ -16,9 +16,12 @@ namespace SlaSerialComm
 
 
 
-      Thread _readThread;
+      Thread _serialReadThread;
+      Thread _fileReadThread;
       SerialPort _serialPort = new SerialPort();
-      bool _bContinue = true;
+      bool _bSerialReadContinue = true;
+      bool _bFileReadEndThread = false;
+      bool _bReadFile = false;
       string _SelectedFileName;
       private FileStream m_oFileStream;
 
@@ -79,8 +82,65 @@ namespace SlaSerialComm
 
          ReadFromRegistry();
 
-         _readThread = new Thread(Read);
-         _readThread.Start();
+         _serialReadThread = new Thread(SerialPortRead);
+         _serialReadThread.Start();
+         _fileReadThread = new Thread(FileRead);
+         _fileReadThread.Start();
+      }
+
+      /**
+         This is the _serialReadThread's main function. It reads data from the serial port if the serial port is open.
+      */
+      public void SerialPortRead()
+      {
+         while (_bSerialReadContinue)
+         {
+            if (_serialPort.IsOpen)
+            {
+               try
+               {
+                  string message = _serialPort.ReadLine();
+                  rtbIncomingData.BeginInvoke(new UpdateTextCallback(UpdateText),
+                              new object[] { message });
+               }
+               catch (TimeoutException) { }
+            }
+         }
+      }
+
+      /**
+         This is the _fileReadThread's main function. It reads data from the serial port if the serial port is open.
+      */
+      public void FileRead()
+      {
+         while (!_bFileReadEndThread)
+         {
+            if (_bReadFile && (0 != _SelectedFileName.Length))
+            {
+               try
+               {
+                  string message = ("File name selected is " + _SelectedFileName);
+                  rtbIncomingData.BeginInvoke(new UpdateTextCallback(UpdateText),
+                           new object[] { message });
+                  m_oFileStream = File.OpenRead(_SelectedFileName);
+                  message = ("File size in bytes is " + m_oFileStream.Length);
+                  rtbIncomingData.BeginInvoke(new UpdateTextCallback(UpdateText),
+                           new object[] { message });
+                  while (m_oFileStream.Position < m_oFileStream.Length)
+                  {
+                     message = m_oFileStream.ReadByte().ToString();
+                     rtbIncomingData.BeginInvoke(new UpdateTextCallback(UpdateText),
+                              new object[] { message });
+                  }
+                  m_oFileStream.Close();
+               }
+               catch (TimeoutException)
+               {
+                  m_oFileStream.Close();
+               }
+               _bReadFile = false;
+            }
+         }
       }
 
       private void btnSerialPorts_Click(object sender, EventArgs e)
@@ -148,23 +208,6 @@ namespace SlaSerialComm
          btnSend.Enabled = false;
       }
 
-      public void Read()
-      {
-         while(_bContinue)
-         {
-            if (_serialPort.IsOpen)
-            {
-               try
-               {
-                  string message = _serialPort.ReadLine();
-                  rtbIncomingData.BeginInvoke(new UpdateTextCallback(UpdateText),
-                              new object[] { message });
-               }
-               catch (TimeoutException) { }
-            }
-         }
-      }
-
       private void btnSend_Click(object sender, EventArgs e)
       {
          if(0 != tboCommands.Text.Length)
@@ -178,19 +221,6 @@ namespace SlaSerialComm
          rtbIncomingData.AppendText(text + "\r\n");
       }
 
-      private void openFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
-      {
-         _SelectedFileName = openFileDialog.FileName;
-         UpdateText("File name selected is " + _SelectedFileName);
-         m_oFileStream = File.OpenRead(_SelectedFileName);
-         UpdateText("File size in bytes is " + m_oFileStream.Length);
-         while (m_oFileStream.Position < m_oFileStream.Length)
-         {
-            UpdateText(m_oFileStream.ReadByte().ToString());
-         }
-         m_oFileStream.Close();
-      }
-
       private void btnLoadFile_Click(object sender, EventArgs e)
       {
          openFileDialog.DefaultExt = ".ild";
@@ -198,10 +228,19 @@ namespace SlaSerialComm
          openFileDialog.ShowDialog();
       }
 
+      private void openFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+      {
+         _SelectedFileName = openFileDialog.FileName;
+         if (0 != _SelectedFileName.Length)
+         {
+            _bReadFile = true;
+         }
+      }
+
       private void SlaSerialCommMainForm_FormClosed(object sender, FormClosedEventArgs e)
       {
-         _bContinue = false;
-         _readThread.Join();
+         _bFileReadEndThread = false;
+         _serialReadThread.Join();
       }
 
       private void ReadFromRegistry()
