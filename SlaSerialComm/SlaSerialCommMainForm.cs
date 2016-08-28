@@ -21,9 +21,9 @@ namespace SlaSerialComm
       SerialPort _serialPort = new SerialPort();
       bool _bSerialReadContinue = true;
       bool _bFileReadEndThread = false;
-      bool _bReadFile = false;
       string _SelectedFileName;
       private FileStream m_oFileStream;
+      private AutoResetEvent _FileReadAutoResetEvent;
 
       public SlaSerialCommMainForm()
       {
@@ -82,10 +82,12 @@ namespace SlaSerialComm
 
          ReadFromRegistry();
 
+         _FileReadAutoResetEvent = new AutoResetEvent(false);
          _serialReadThread = new Thread(SerialPortRead);
          _serialReadThread.Start();
          _fileReadThread = new Thread(FileRead);
          _fileReadThread.Start();
+
       }
 
       /**
@@ -113,9 +115,12 @@ namespace SlaSerialComm
       */
       public void FileRead()
       {
-         while (!_bFileReadEndThread)
+         do
          {
-            if (_bReadFile && (0 != _SelectedFileName.Length))
+            // Wait for the main thread to signal that we are ready to read the file
+            //
+            _FileReadAutoResetEvent.WaitOne();
+            if (!_bFileReadEndThread)
             {
                try
                {
@@ -138,9 +143,8 @@ namespace SlaSerialComm
                {
                   m_oFileStream.Close();
                }
-               _bReadFile = false;
             }
-         }
+         } while (!_bFileReadEndThread);
       }
 
       private void btnSerialPorts_Click(object sender, EventArgs e)
@@ -233,14 +237,18 @@ namespace SlaSerialComm
          _SelectedFileName = openFileDialog.FileName;
          if (0 != _SelectedFileName.Length)
          {
-            _bReadFile = true;
+            _FileReadAutoResetEvent.Set();
          }
       }
 
       private void SlaSerialCommMainForm_FormClosed(object sender, FormClosedEventArgs e)
       {
-         _bFileReadEndThread = false;
+         _bFileReadEndThread = true;
+         _FileReadAutoResetEvent.Set();
+         _fileReadThread.Join();
+         _bSerialReadContinue = false;
          _serialReadThread.Join();
+         
       }
 
       private void ReadFromRegistry()
