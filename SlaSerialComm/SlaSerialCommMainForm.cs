@@ -5,6 +5,10 @@ using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
+
+/**
+   @note Task-based Asynchronous Pattern(TAP) is the recommended pattern by MS
+*/
 namespace SlaSerialComm
 {
    public partial class SlaSerialCommMainForm : Form
@@ -150,7 +154,7 @@ namespace SlaSerialComm
       private void btnSerialPorts_Click(object sender, EventArgs e)
       {
          string[] Array_serialPortsNames = null;
-
+         cboSerialPorts.Items.Clear();
          Array_serialPortsNames = SerialPort.GetPortNames();
          if (0 != Array_serialPortsNames.GetLength(0))
          {
